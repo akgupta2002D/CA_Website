@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
-import { createSession, updateSession } from '../lib/firebaseOperations'
 
-export default function ChatInterface ({ session, onNewSession }) {
+export default function ChatInterface () {
   const MarkdownComponents = {
     p: props => <Typography {...props} paragraph />,
     ul: props => (
@@ -15,38 +14,12 @@ export default function ChatInterface ({ session, onNewSession }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content:
-        'Namaste! Let me answer your questions about the constitution of Nepal'
+      content: 'Hey there! Ask me anything reslife!'
     }
   ])
   const [message, setMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [sessionId, setSessionId] = useState(null)
   const [isTyping, setIsTyping] = useState(false)
-
-  useEffect(() => {
-    if (session) {
-      setMessages(
-        session.messages || [
-          {
-            role: 'assistant',
-            content:
-              'Namaste! Let me answer your questions about the constitution of Nepal'
-          }
-        ]
-      )
-      setSessionId(session.id)
-    } else {
-      setMessages([
-        {
-          role: 'assistant',
-          content:
-            'Namaste! Let me answer your questions about the constitution of Nepal'
-        }
-      ])
-      setSessionId(null)
-    }
-  }, [session])
 
   const sendMessage = async () => {
     if (!message.trim()) return
@@ -58,15 +31,6 @@ export default function ChatInterface ({ session, onNewSession }) {
 
     setMessage('')
     setMessages(updatedMessages)
-
-    let currentSessionId = sessionId
-    if (!currentSessionId) {
-      currentSessionId = await createSession(message)
-      setSessionId(currentSessionId)
-      onNewSession(currentSessionId, message)
-    }
-
-    await updateSession(currentSessionId, updatedMessages)
 
     try {
       const response = await fetch('/api/llamaChat', {
@@ -98,7 +62,6 @@ export default function ChatInterface ({ session, onNewSession }) {
             ...prevMessages.slice(0, -1),
             { ...assistantMessage }
           ]
-          updateSession(currentSessionId, newMessages)
           return newMessages
         })
       }
@@ -109,11 +72,7 @@ export default function ChatInterface ({ session, onNewSession }) {
         content:
           "I'm sorry, but I encountered an error. Please try again later."
       }
-      setMessages(prevMessages => {
-        const newMessages = [...prevMessages, errorMessage]
-        updateSession(currentSessionId, newMessages)
-        return newMessages
-      })
+      setMessages(prevMessages => [...prevMessages, errorMessage])
     } finally {
       setIsLoading(false)
       setIsTyping(false) // Ensure typing indicator is hidden in case of error
@@ -257,22 +216,6 @@ export default function ChatInterface ({ session, onNewSession }) {
           </Button>
         </Stack>
       </Stack>
-
-      {/* <Box
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16,
-          width: 400,
-          height: 500,
-          background: 'transparent',
-          borderRadius: '8px',
-          overflow: 'hidden',
-          zIndex: 10
-        }}
-      >
-        <ThreeScene />
-      </Box> */}
     </Box>
   )
 }

@@ -1,6 +1,6 @@
 /**
  * Author: Ankit Gupta
- * Project: Nepal Constitution AI
+ * Project: RA & CA Information Assistant
  *
  * Configuration and utility functions for Llama model via OpenRouter.
  */
@@ -18,46 +18,46 @@ const llamaOpenRouter = new OpenAI({
 })
 
 // Specify the Llama model to be used
-export const LLAMA_MODEL_NAME = 'meta-llama/llama-3.1-8b-instruct:free'
+export const LLAMA_MODEL_NAME = 'meta-llama/llama-3.1-8b-instruct:free' // Adjust model as per the requirement
 
 // Generate system prompt for the Llama model
 export function createLlamaSystemPrompt () {
-  return `You are an AI assistant based on the Llama 3.1 8B Instruct model, specializing in the Constitution of Nepal. Your primary function is to provide accurate, detailed, and helpful information about Nepal's constitutional framework. When responding:
+  return `You are an AI assistant based on the Llama model, specializing in providing information for Residential Assistants and Community Assistants. Your primary function is to provide accurate, detailed, and helpful information about residential life and community management. When responding:
 
-  1. Always prioritize accuracy and relevance to Nepal's Constitution.
-  2. Use Markdown formatting for improved readability.
+  1. Always prioritize accuracy and relevance to the RA and CA duties.
+  2. Use clear and concise language for easy understanding.
   3. Structure your response with clear paragraphs.
-  4. Always refer to the provided context from Nepal's Constitution when answering.
-  5. If the provided context doesn't cover the query, clearly state that the information might not be in the current constitutional framework.
-  6. Use official terms and names as used in Nepal's Constitution.
-  7. Maintain a formal and authoritative tone throughout the conversation.
-  8. If a query falls outside the scope of Nepal's Constitution, politely redirect the conversation to constitutional matters.
-  9. Provide historical context or amendments when relevant to the constitutional discussion.`
+  4. Always refer to the provided training manuals or guidelines when answering.
+  5. If the provided context doesn't cover the query, clearly state that the information might not be available.
+  6. Use official terms and names as used in training materials.
+  7. Maintain a professional and supportive tone throughout the conversation.
+  8. If a query falls outside the scope of RA and CA responsibilities, politely redirect the conversation to relevant topics.
+  9. Provide practical examples or suggestions when relevant to the discussion of residential life or community management.`
 }
 
-// Enhance user prompt with relevant constitutional context
+// Enhance user prompt with relevant context
 export function enhanceLlamaPromptWithContext (originalPrompt, context) {
   if (!context.length)
-    return `Question about Nepal's Constitution: ${originalPrompt}`
+    return `Question related to RA and CA duties: ${originalPrompt}`
 
   const formattedContext = context
-    .map((doc, index) => `Constitutional Provision ${index + 1}: ${doc}`)
+    .map((doc, index) => `Training Material ${index + 1}: ${doc}`)
     .join('\n\n')
 
   return `
-Relevant Constitutional Provisions:
+Relevant Training Materials:
 ${formattedContext}
 
-User's Question about Nepal's Constitution:
+User's Question about RA and CA Duties:
 ${originalPrompt}
 
 Guidance for Response:
-- Provide a concise and structured answer based on Nepal's Constitution.
-- Use bullet points or numbered lists to clarify distinct constitutional points.
-- Use official legal and constitutional terminology as appropriate.
-- If the question relates to a specific article or section, reference it directly.
-- If the constitutional context provided is insufficient, state this clearly and provide any general knowledge about Nepal's constitutional framework that might be relevant.
-- Ensure your response aligns with the latest amendments and provisions of Nepal's Constitution.`
+- Provide a concise and structured answer based on RA and CA training manuals.
+- Use bullet points or numbered lists to clarify distinct points.
+- Use official terminology as appropriate.
+- If the question relates to a specific guideline or section, reference it directly.
+- If the training materials provided are insufficient, state this clearly and provide any general knowledge about RA and CA duties that might be relevant.
+- Ensure your response aligns with the latest guidelines and practices for RAs and CAs.`
 }
 
 export default llamaOpenRouter
