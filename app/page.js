@@ -1,24 +1,13 @@
-// pages/index.js
+// app/page.js
 import React from 'react'
 import { AppBar, Toolbar, Typography, Container } from '@mui/material'
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'
 import BlogPost from './blogComponents/BlogPost'
+import { getPosts } from './blogLib/getPosts'
 
-const posts = [
-  {
-    title: '🌟 Welcome to Jonsson and Wiecking! 🌟',
-    content: `Hey everyone! We're super excited to kick off the semester in Jonsson and Wiecking Buildings. Get ready for some awesome events and a fantastic community! 🎉`,
-    image: '/images/welcome.jpg'
-  },
-  {
-    title: '🎬 Movie Night in the Lounge 🎬',
-    content: `Join us this Friday for a movie night in the Jonsson lounge. Popcorn and snacks will be provided! Don't forget to bring your cozy blankets. 🍿`,
-    image: '/images/movie-night.jpg'
-  }
-  // Add more posts here
-]
+export default function Home () {
+  const posts = getPosts() // Call getPosts directly in the component
 
-const Home = () => {
   return (
     <>
       <AppBar position='static' color='primary'>
@@ -36,12 +25,10 @@ const Home = () => {
             index={index}
             title={post.title}
             content={post.content}
-            image={post.image}
+            image={`/${post.image}`} // Prefix with slash to use public path
           />
         ))}
       </Container>
     </>
   )
 }
-
-export default Home
