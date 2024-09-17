@@ -13,7 +13,7 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: 'Comic Sans MS, cursive, sans-serif' // Adds a fun font
+    fontFamily: 'Comic Sans MS, sans-serif' // Adds a fun font
   }
 })
 
